@@ -4,15 +4,16 @@ from waggle.plugin import Plugin
 from waggle.data.vision import Camera
 
 
-def compute_mean_color(image):
-    return np.mean(image, (0, 1)).astype(float)
+def compute_color_stats(image):
+    # Compute per-channel mean, max, and min.
+    return {
+        "mean": np.mean(image, axis=(0, 1)),
+        "max": np.max(image, axis=(0, 1)),
+        "min": np.min(image, axis=(0, 1)),
+        "median": np.median(image, axis=(0, 1)),
+    }
 
-def compute_max_color(image):
-    return np.max(image, (0, 1)).astype(float)
-
-def compute_min_color(image):
-    return np.min(image, (0, 1)).astype(float)
-
+'''
 def main():
   with Plugin() as plugin:
     # open camera and take an image
@@ -47,7 +48,24 @@ def main():
     plugin.publish("color.min.r", min_color[0], timestamp=image.timestamp)
     plugin.publish("color.min.g", min_color[1], timestamp=image.timestamp)
     plugin.publish("color.min.b", min_color[2], timestamp=image.timestamp)
+'''
 
+def main():
+    with Plugin() as plugin, Camera("file://example.jpg") as camera:
+        image = camera.snapshot()
+
+        stats = compute_color_stats(image.data)
+        channels = ("r", "g", "b")
+
+        for stat_name, values in stats.items():
+            print(f"{stat_name}: {values}")
+
+            for channel, value in zip(channels, values):
+                plugin.publish(
+                    f"color.{stat_name}.{channel}",
+                    float(value),
+                    timestamp=image.timestamp,
+                )
 
     # save and upload image
     #snapshot.save("image.jpg")

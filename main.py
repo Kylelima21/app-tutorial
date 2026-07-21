@@ -67,10 +67,5 @@ def main():
                     timestamp=image.timestamp,
                 )
 
-    # save and upload image
-    #snapshot.save("image.jpg")
-    #plugin.upload_file("image.jpg", timestamp=image.timestamp)
-    
-
 if __name__ == "__main__":
     main()

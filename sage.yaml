@@ -1,12 +1,12 @@
 name: "sage-test-app"
 version: "0.1.0"
-description: "test"
+description: "A test application"
 keywords: ""
-authors: "Kyle"
+authors: "Kyle Lima"
 collaborators: ""
 funding: ""
 license: ""
-homepage: ""
+homepage: "https://github.com/Kylelima21/app-tutorial"
 source:
   architectures:
     - "linux/amd64"

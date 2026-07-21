@@ -14,9 +14,10 @@ def compute_min_color(image):
     return np.min(image, (0, 1)).astype(float)
 
 def main():
-  with Plugin() as plugin, Camera("file://example.jpg") as camera:
-    # read example image from file
-    image = camera.snapshot()
+  with Plugin() as plugin:
+    # open camera and take an image
+    with Camera("file://example.jpg") as camera:
+        image = camera.snapshot()
 
     # compute mean color
     mean_color = compute_mean_color(image.data)
@@ -47,6 +48,11 @@ def main():
     plugin.publish("color.min.g", min_color[1], timestamp=image.timestamp)
     plugin.publish("color.min.b", min_color[2], timestamp=image.timestamp)
 
+
+    # save and upload image
+    #snapshot.save("image.jpg")
+    #plugin.upload_file("image.jpg", timestamp=image.timestamp)
+    
 
 if __name__ == "__main__":
     main()
